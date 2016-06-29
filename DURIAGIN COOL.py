@@ -6,7 +6,7 @@ def gettext():
     return text
 
 def getinitnames(text):
-    result = re.findall(r'([А-Я]\.\s[А-Я][^\s|\W|\d]+)|([А-Я][^\s|\W|\d]\.\s[А-Я][^\s|\W|\d]+)', text)
+    result = re.findall(r'([А-Я]\.\s[А-Я][^\s|\W|\d]+)', text)
     for el in result:
         print(el)
 

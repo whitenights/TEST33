@@ -7,17 +7,23 @@ def gettext():
 
 def getinitnames(text):
     result = re.findall(r'([А-ЯЁ]\.\s[А-ЯЁ][^\s|\W|\d]+)', text)
+    result1 = re.findall(r'[А-ЯЁ]. [А-ЯЁ]. [А-ЯЁ][а-яё]+', text)
     for el in result:
         print(el)
+    for el2 in result1:
+        print(el2)
 
-def getfullnames(text):
-    result = re.findall(r'([А-ЯЁ][^\s|\W|\d]\\s[А-ЯЁ][^\s|\W|\d]+)', text)
-    for el1 in result:
-        print(el1)
 
+def getfull(text):
+    result = re.findall(r'([А-ЯЁ][а-яё]\\s[А-ЯЁ][а-яё]+)', text)
+    for el in result:
+        print(el)
+        
 def main():
     num = gettext()
     getinitnames(num)
-    getfullnames(num)
-    
+    getfull(num)
+   
+
 main()
+

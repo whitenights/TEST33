@@ -1,0 +1,56 @@
+import html
+import re
+import os
+import json
+
+def wordlist(filename):
+    words = []
+    f = open(filename,'r',encoding='utf-8')
+    for line in f.readlines():
+        line = line.strip()
+        words.append(line)
+    return words
+
+
+def find_words(words,text):
+    wordsfound = []
+    for word in words:
+        isword = re.search('\\b'+word.lower()+'\\b',text)
+        if isword is not None:
+            wordsfound.append(word)
+    return set(wordsfound)
+
+
+def write_list(wlist,filename):
+    f = open(filename,'w',encoding='utf-8-sig')
+    f.write('\n'.join(wlist))
+    f.close()
+
+
+def open_html(filename):
+    f = open(filename,'r',encoding='utf-8')
+    text = f.read()
+    text = html.unescape(text)
+    text = re.sub('<head>.*?</head>','',text,flags=re.DOTALL)    
+    text = re.sub('<.*?>','',text)
+    return text
+
+
+def analysis(filenamein,filenameout):
+    rus_nouns = []
+    os.system('C:\mystem.exe '+filenamein+' '+filenameout+' -niw')
+    f = open(filenameout,'r',encoding='utf-8')
+    for line in f.readlines():
+        gram = re.findall('(.*?)\{(.*?)\}',line)[0]
+        if re.search('S.*?им,ед',gram[1]) is not None:
+            rus_nouns.append(gram[0])
+    return set(rus_nouns)
+
+    
+    
+unparsed = wordlist('adyghe-unparsed-words.txt')
+adyghe_politics = open_html('view-source_www.adygvoice.ru_wp_category_politics_.html')
+wordsfound = find_words(unparsed,adyghe_politics)
+write_list(wordsfound,'wordlist.txt')
+rus_nouns = analysis('adyghe-unparsed-words.txt','wordlist_parsed.txt')
+write_list(rus_nouns,'rus_nouns.txt')
